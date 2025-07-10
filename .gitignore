@@ -1,0 +1,34 @@
+# Binários compilados
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Diretórios de build
+bin/
+build/
+out/
+
+# Arquivos temporários do editor e sistema operacional
+*.log
+*.tmp
+*.swp
+*.DS_Store
+
+# Diretórios e arquivos do Go
+vendor/
+*.test
+cover.out
+
+# Arquivos do módulo Go
+go.sum
+
+# Diretórios do editor (exemplos)
+.vscode/
+.idea/
+*.iml
+
+# Arquivos gerados por ferramentas (exemplo: dep)
+Gopkg.lock
+Gopkg.toml
