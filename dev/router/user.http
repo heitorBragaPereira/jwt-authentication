@@ -1,0 +1,12 @@
+
+@port = 8081
+@apiurl = http://localhost:{{port}}/api 
+
+POST {{apiurl}}/user/create
+Content-Type: application/json
+
+{
+   "name":"Heitor",
+   "username":"heitor.braga.pereira@outlook.com",
+   "password":"12345"
+}
