@@ -6,12 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRoutes(r *gin.RouterGroup, ctrls *controller.ControllerContainer) {
+func InitRoutes(r *gin.RouterGroup, c *controller.ControllerContainer) {
 	// Rotas de usuário
 	userRoutes := r.Group("/user")
 	{
-		userRoutes.POST("/create", ctrls.User.CreateUser)
-		userRoutes.POST("/login", controller.Login) // Observe que Login ainda é uma função direta
+		userRoutes.POST("/create", c.User.CreateUser)
+		userRoutes.POST("/login", c.User.Login) // Observe que Login ainda é uma função direta
 	}
 
 	// Futuramente você pode adicionar outros grupos de rotas aqui

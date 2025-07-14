@@ -32,6 +32,17 @@ func (uc *UserController) CreateUser(c *gin.Context) {
 	c.JSON(201, gin.H{"message": "User created successfully"})
 }
 
-func Login(c *gin.Context) {
-
+func (uc *UserController) Login(c *gin.Context) {
+	var userRequest dto.LoginDTO
+	if err := c.ShouldBindJSON(&userRequest); err != nil {
+		restErr := rest.NewBadRequestError("There are some incorrect fields")
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	loginResp, err := uc.userService.Login(userRequest)
+	if err != nil {
+		c.JSON(err.Code, err)
+		return
+	}
+	c.JSON(200, loginResp)
 }

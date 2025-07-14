@@ -34,3 +34,12 @@ func NewInternalServerError(message string) *RestErr {
 		Error:   "internal_server_error",
 	}
 }
+
+// Função para erro 401 - Unauthorized
+func NewUnauthorizedError(message string) *RestErr {
+	return &RestErr{
+		Message: message,
+		Code:    http.StatusUnauthorized,
+		Error:   "unauthorized",
+	}
+}

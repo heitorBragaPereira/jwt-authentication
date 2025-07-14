@@ -2,7 +2,8 @@ package repository
 
 import (
 	"database/sql"
-	"jwt-authentication/internal/model"
+	"errors"
+	"fmt"
 	"jwt-authentication/internal/model/dto"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -10,7 +11,7 @@ import (
 
 type UserRepository interface {
 	Create(user dto.UserDTO) error
-	FindByUsername(username string) (*model.User, error)
+	FindByUsername(username dto.LoginDTO) (*dto.UserDTO, error)
 }
 
 type sqliteUserRepository struct {
@@ -35,27 +36,26 @@ func (r *sqliteUserRepository) Create(user dto.UserDTO) error {
 	return nil
 }
 
-func (r *sqliteUserRepository) FindByUsername(username string) (*model.User, error) {
+func (r *sqliteUserRepository) FindByUsername(u dto.LoginDTO) (*dto.UserDTO, error) {
 	query := `
-		SELECT id, name, username, hashed_password, created_at
+		SELECT name, username, hashed_password
 		FROM user
 		WHERE username = ?
+		LIMIT 1
 	`
 
-	var user model.User
-	err := r.db.QueryRow(query, username).Scan(
-		&user.Id_user,
+	var user dto.UserDTO
+	err := r.db.QueryRow(query, u.Username).Scan(
 		&user.Name,
 		&user.Username,
 		&user.HashedPassword,
-		&user.CreatedAt,
 	)
 
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, sql.ErrNoRows) {
 			return nil, nil
 		}
-		return nil, err
+		return nil, fmt.Errorf("falha ao buscar usuário no banco: %w", err)
 	}
 
 	return &user, nil
