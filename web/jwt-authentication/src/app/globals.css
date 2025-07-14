@@ -2,7 +2,7 @@
 
 @theme {
   --color-primary: var(--color-blue-600);
-  --color-secondary: var(--color-blue-300);
+  --color-secondary: var(--color-gray-100);
 }
 
 body {
