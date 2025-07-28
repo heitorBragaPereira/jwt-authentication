@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { createUser } from "@/services/createUser";
-import { CreateUser } from "@/interfaces/createUser";
+import { createUser } from "@/services/user";
+import { CreateUser } from "@/interfaces/user";
 
 export function useCreateUser() {
   const [loading, setLoading] = useState<boolean>(false);

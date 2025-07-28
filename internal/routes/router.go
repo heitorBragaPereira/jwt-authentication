@@ -2,6 +2,7 @@ package routes
 
 import (
 	"jwt-authentication/internal/controller"
+	"jwt-authentication/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,12 @@ func InitRoutes(r *gin.RouterGroup, c *controller.ControllerContainer) {
 	{
 		userRoutes.POST("/create", c.User.CreateUser)
 		userRoutes.POST("/login", c.User.Login) // Observe que Login ainda é uma função direta
+	}
+
+	protected := r.Group("/home")
+	protected.Use(middleware.AuthMiddleware())
+	{
+		protected.GET("/dashboard", c.User.Login)
 	}
 
 	// Futuramente você pode adicionar outros grupos de rotas aqui

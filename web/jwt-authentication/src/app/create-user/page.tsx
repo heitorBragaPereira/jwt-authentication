@@ -9,9 +9,10 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Subtitle } from "@/components/ui/subtitle";
 import { Link } from "@/components/ui/link";
-import { CreateUser } from "@/interfaces/createUser";
+import { CreateUser } from "@/interfaces/user";
 import { Toaster } from "@/components/ui/sonner";
 import { useCreateUser } from "@/hooks/useCreateUser";
+import Spinner from "@/components/ui/spinner";
 
 export default function Page() {
   const userDefault: CreateUser = {
@@ -52,7 +53,7 @@ export default function Page() {
   return (
     <div className="w-full h-screen flex justify-center items-center bg-gray-800">
       <Toaster richColors />
-      <div className="w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded">
+      <div className="relative w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded">
         <div className="w-full flex flex-col items-center mb-4">
           <Image src={path} alt="Logo" width={100} />
           <Subtitle>Cadastrar usuário</Subtitle>
@@ -104,7 +105,11 @@ export default function Page() {
         <Button onClick={createUser} disabled={disabledButton}>
           Cadastrar
         </Button>
-        {loading && <span className="text-center">Cadastrando...</span>}
+        {loading && (
+          <div className="absolute left-0 top-0 rounded w-full h-full flex justify-center items-center backdrop-blur bg-white/30">
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   );
