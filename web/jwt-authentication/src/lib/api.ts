@@ -6,6 +6,7 @@ import axios, {
 
 const api = axios.create({
   baseURL: "//192.168.4.3:8081/api",
+  withCredentials: true,
 });
 
 api.interceptors.request.use(

@@ -59,5 +59,9 @@ func (s *userService) Login(user dto.LoginDTO) (dto.LoginResponseDTO, *rest.Rest
 		return dto.LoginResponseDTO{}, rest.NewInternalServerError("Erro ao gerar token")
 	}
 
+	if err != nil {
+		return dto.LoginResponseDTO{}, rest.NewInternalServerError("Erro ao buscar vault items")
+	}
+
 	return dto.LoginResponseDTO{Token: token}, nil
 }

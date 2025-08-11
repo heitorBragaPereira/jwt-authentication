@@ -18,7 +18,7 @@ func InitRoutes(r *gin.RouterGroup, c *controller.ControllerContainer) {
 	protected := r.Group("/home")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		protected.GET("/dashboard", c.User.Login)
+		protected.GET("/fetch", c.User.Login)
 	}
 
 	// Futuramente você pode adicionar outros grupos de rotas aqui

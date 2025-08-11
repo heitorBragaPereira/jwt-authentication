@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: var(--color-blue-600);
-  --color-secondary: var(--color-gray-100);
+  --color-primary: var(--color-blue-400);
+  --color-secondary: #232323;
 }
 
 body {
   margin: 0;
-  background-color: rgb(51, 51, 51);
+  background-color: #333333;
 }

@@ -10,9 +10,14 @@ import { useLoginUser } from "@/hooks/useLoginUser";
 import { LoginUser } from "@/interfaces/user";
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
+import Spinner from "@/components/ui/spinner";
 
 export default function Page() {
-  const { login } = useLoginUser();
+  const { login, loading } = useLoginUser();
+  const router = useRouter();
   const userDefault = {
     username: "",
     password: "",
@@ -27,11 +32,19 @@ export default function Page() {
   };
   const loginUser = async () => {
     const res = await login(user);
-    console.log(res);
+    debugger;
+    if (res?.success) {
+      router.push("/home");
+    } else {
+      toast.error("Usuário ou senha incorretos!", {
+        position: "top-right",
+      });
+    }
   };
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      <div className="w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded">
+      <Toaster richColors />
+      <div className="relative w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded">
         <div className="w-full flex flex-col items-center mb-4">
           <Image src={path} alt="Logo" width={100} />
           <Subtitle>Acesso ao sistema</Subtitle>
@@ -58,11 +71,16 @@ export default function Page() {
               })
             }
           />
-          <Link path="/create-user" className="text-end">
+          <Link path="/create-user" className="text-end text-primary">
             Cadastrar um novo usuário?
           </Link>
         </div>
         <Button onClick={loginUser}>Entrar</Button>
+        {loading && (
+          <div className="absolute left-0 top-0 rounded w-full h-full flex justify-center items-center backdrop-blur bg-white/30">
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   );

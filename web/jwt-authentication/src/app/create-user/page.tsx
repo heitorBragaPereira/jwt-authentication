@@ -51,7 +51,7 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-gray-800">
+    <div className="w-full h-screen flex justify-center items-center">
       <Toaster richColors />
       <div className="relative w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded">
         <div className="w-full flex flex-col items-center mb-4">
@@ -98,7 +98,7 @@ export default function Page() {
               handleChangeValidate(e.target.value)
             }
           />
-          <Link path="/login" className="text-end">
+          <Link path="/login" className="text-end text-primary">
             Voltar para a tela de login
           </Link>
         </div>

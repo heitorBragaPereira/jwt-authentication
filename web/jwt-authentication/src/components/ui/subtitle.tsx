@@ -8,7 +8,7 @@ type TitleProps = {
 export function Subtitle({ children, className = "" }: TitleProps) {
   return (
     <h4
-      className={`text-[18px] font-semibold text-gray-900 tracking-tight ${className}`}
+      className={`text-[18px] font-semibold text-white tracking-tight ${className}`}
     >
       {children}
     </h4>

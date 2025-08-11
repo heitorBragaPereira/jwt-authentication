@@ -58,3 +58,30 @@ func (uc *UserController) Login(c *gin.Context) {
 
 	c.JSON(200, gin.H{"message": "Login realizado com sucesso"})
 }
+
+// func (uc *UserController) GetUser(c *gin.Context) {
+// 	var userRequest dto.LoginDTO
+// 	if err := c.ShouldBindJSON(&userRequest); err != nil {
+// 		restErr := rest.NewBadRequestError("There are some incorrect fields")
+// 		c.JSON(restErr.Code, restErr)
+// 		return
+// 	}
+// 	loginResp, err := uc.userService.Login(userRequest)
+// 	if err != nil {
+// 		c.JSON(err.Code, err)
+// 		return
+// 	}
+
+// 	// 🧠 Define o cookie HttpOnly com o token JWT
+// 	c.SetCookie(
+// 		"token",         // nome do cookie
+// 		loginResp.Token, // valor: o JWT gerado
+// 		3600,            // tempo de expiração (em segundos) → 1h
+// 		"/",             // path
+// 		"",              // domínio ("" = atual)
+// 		true,            // secure (HTTPS em produção!)
+// 		true,            // httpOnly (impede acesso via JS)
+// 	)
+
+// 	c.JSON(200, gin.H{"message": "Login realizado com sucesso"})
+// }
