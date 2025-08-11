@@ -10,3 +10,9 @@ type VaultItemDTO struct {
 	CreatedAt      string `json:"created_at"`
 	UpdatedAt      string `json:"updated_at"`
 }
+
+type CreateVaultItemDTO struct {
+	IdUser   int    `json:"idUser"`
+	Username string `json:"username"`
+	Url      string `json:"url"`
+}

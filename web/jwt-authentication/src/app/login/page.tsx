@@ -32,7 +32,6 @@ export default function Page() {
   };
   const loginUser = async () => {
     const res = await login(user);
-    debugger;
     if (res?.success) {
       router.push("/home");
     } else {
