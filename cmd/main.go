@@ -33,7 +33,8 @@ func main() {
 	defer db.Close()
 
 	userRepo := repository.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
+	vaultRepo := repository.NewVaultRepository(db)
+	userService := services.NewUserService(userRepo, vaultRepo)
 	controllers := controller.NewControllerContainer(userService)
 
 	router := gin.Default()

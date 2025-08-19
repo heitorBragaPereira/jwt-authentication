@@ -56,7 +56,7 @@ func (uc *UserController) Login(c *gin.Context) {
 		true,            // httpOnly (impede acesso via JS)
 	)
 
-	c.JSON(200, gin.H{"message": "Login realizado com sucesso"})
+	c.JSON(200, loginResp)
 }
 
 // func (uc *UserController) GetUser(c *gin.Context) {

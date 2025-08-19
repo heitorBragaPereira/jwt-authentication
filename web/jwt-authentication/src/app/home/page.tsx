@@ -1,17 +1,21 @@
+"use client";
+
 import logo from "@/assets/logo.svg";
 import notPasswords from "@/assets/notPasswords.svg";
 import Image from "next/image";
 import DialogComponent from "./components/DialogComponent";
 import { Button } from "@/components/ui/button";
 import { DoorClosedLocked } from "lucide-react";
+import { useUserStore } from "@/stores/userStore";
 
 export default function Page() {
+  const user = useUserStore((s) => s.user);
   return (
     <div className="w-full flex flex-col">
       <div className="w-full h-[80px] bg-secondary flex items-center justify-around">
         <div className="flex items-center gap-2">
           <Image src={logo} alt="Logo" width={55} />
-          <p className="text-white">Olá, Heitor!</p>
+          {user && <p className="text-white">Olá, {user.name}!</p>}
         </div>
         <Button variant={"outline"} className="text-red-200">
           <DoorClosedLocked />

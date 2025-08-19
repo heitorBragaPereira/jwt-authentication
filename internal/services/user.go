@@ -13,11 +13,15 @@ type UserService interface {
 }
 
 type userService struct {
-	userRepo repository.UserRepository
+	userRepo  repository.UserRepository
+	vaultRepo repository.VaultRepository
 }
 
-func NewUserService(repo repository.UserRepository) UserService {
-	return &userService{userRepo: repo}
+func NewUserService(userRepo repository.UserRepository, vaultRepo repository.VaultRepository) UserService {
+	return &userService{
+		userRepo:  userRepo,
+		vaultRepo: vaultRepo,
+	}
 }
 
 func (s *userService) CreateUser(user dto.UserDTO) *rest.RestErr {
@@ -59,9 +63,20 @@ func (s *userService) Login(user dto.LoginDTO) (dto.LoginResponseDTO, *rest.Rest
 		return dto.LoginResponseDTO{}, rest.NewInternalServerError("Erro ao gerar token")
 	}
 
-	if err != nil {
-		return dto.LoginResponseDTO{}, rest.NewInternalServerError("Erro ao buscar vault items")
+	userDTO := dto.GetUserDTO{
+		Id:       foundUser.Id,
+		Name:     foundUser.Name,
+		Username: foundUser.Username,
 	}
 
-	return dto.LoginResponseDTO{Token: token}, nil
+	vaultItems, err := s.vaultRepo.GetVaultItemsByUserId(foundUser.Id)
+	if err != nil {
+		return dto.LoginResponseDTO{}, rest.NewInternalServerError("Erro ao buscar itens do cofre")
+	}
+
+	return dto.LoginResponseDTO{
+		Token: token,
+		User:  userDTO,
+		Vault: vaultItems,
+	}, nil
 }
