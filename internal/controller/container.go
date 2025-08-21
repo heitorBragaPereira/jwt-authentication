@@ -3,12 +3,13 @@ package controller
 import "jwt-authentication/internal/services"
 
 type ControllerContainer struct {
-	User *UserController
-	// outros controladores
+	User  *UserController
+	Vault *VaultController
 }
 
-func NewControllerContainer(userService services.UserService) *ControllerContainer {
+func NewControllerContainer(userService services.UserService, vaultService services.VaultService) *ControllerContainer {
 	return &ControllerContainer{
-		User: NewUserController(userService),
+		User:  NewUserController(userService),
+		Vault: NewVaultController(vaultService),
 	}
 }

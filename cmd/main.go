@@ -35,7 +35,8 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 	vaultRepo := repository.NewVaultRepository(db)
 	userService := services.NewUserService(userRepo, vaultRepo)
-	controllers := controller.NewControllerContainer(userService)
+	vaultService := services.NewVaultService(vaultRepo)
+	controllers := controller.NewControllerContainer(userService, vaultService)
 
 	router := gin.Default()
 

@@ -8,6 +8,7 @@ import (
 
 type VaultRepository interface {
 	GetVaultItemsByUserId(userID int) ([]dto.VaultItemDTO, error)
+	RegisterNewVaultItem(vaultItem dto.CreateVaultItemDTO) error
 }
 
 type sqliteVaultRepository struct {
@@ -56,4 +57,24 @@ func (r *sqliteVaultRepository) GetVaultItemsByUserId(userID int) ([]dto.VaultIt
 	}
 
 	return items, nil
+}
+
+func (r *sqliteVaultRepository) RegisterNewVaultItem(vaultItem dto.CreateVaultItemDTO) error {
+	query := `
+	INSERT INTO vault_items (id_user, description, username, url, encrypted_value, nonce) 
+	VALUES (?, ?, ?, ?, ?, ?);
+`
+	_, err := r.db.Exec(query,
+		vaultItem.IdUser,
+		vaultItem.Description,
+		vaultItem.Username,
+		vaultItem.Url,
+		vaultItem.HashedPassword,
+		vaultItem.Nonce,
+	)
+
+	if err != nil {
+		return err
+	}
+	return nil
 }

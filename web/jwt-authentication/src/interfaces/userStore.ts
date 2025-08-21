@@ -1,5 +1,5 @@
 export interface UserStore {
-  id: string;
+  idUser: number;
   username: string;
   name: string;
 }

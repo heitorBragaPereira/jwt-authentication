@@ -15,17 +15,10 @@ func InitRoutes(r *gin.RouterGroup, c *controller.ControllerContainer) {
 		userRoutes.POST("/login", c.User.Login) // Observe que Login ainda é uma função direta
 	}
 
-	protected := r.Group("/home")
+	protected := r.Group("/vault")
 	protected.Use(middleware.AuthMiddleware())
 	{
-		protected.GET("/fetch", c.User.Login)
+		protected.POST("/create", c.Vault.CreateVaultItem)
+		protected.POST("/register_")
 	}
-
-	// Futuramente você pode adicionar outros grupos de rotas aqui
-	/*
-		authRoutes := r.Group("/auth")
-		{
-			authRoutes.POST("/refresh", ctrls.Auth.RefreshToken)
-		}
-	*/
 }

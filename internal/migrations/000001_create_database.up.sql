@@ -13,8 +13,8 @@ CREATE TABLE vault_items (
     description TEXT NOT NULL,
     username TEXT,
     url TEXT,
-    encrypted_value TEXT NOT NULL,
-    nonce TEXT NOT NULL,
+    encrypted_value BLOB NOT NULL,
+    nonce BLOB NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_user) REFERENCES user(id_user) ON DELETE CASCADE
