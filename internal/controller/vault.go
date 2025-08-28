@@ -4,6 +4,7 @@ import (
 	"jwt-authentication/internal/config/rest"
 	"jwt-authentication/internal/model/dto"
 	"jwt-authentication/internal/services"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,4 +29,26 @@ func (v *VaultController) CreateVaultItem(c *gin.Context) {
 		return
 	}
 	c.JSON(201, gin.H{"message": "User created successfully"})
+}
+
+func (v *VaultController) GetVaultItem(c *gin.Context) {
+	userIdStr := c.Query("id")
+	if userIdStr == "" {
+		c.JSON(400, gin.H{"error": "id do usuário é obrigatório"})
+		return
+	}
+
+	userId, err := strconv.Atoi(userIdStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "id do usuário inválido"})
+		return
+	}
+
+	items, err := v.vaultService.GetVaultItem(userId)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, items)
 }

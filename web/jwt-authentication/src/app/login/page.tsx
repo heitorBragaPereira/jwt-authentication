@@ -14,9 +14,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import Spinner from "@/components/ui/spinner";
+import { useGetVaultItems } from "@/hooks/useGetVaultItems";
 
 export default function Page() {
   const { login, loading } = useLoginUser();
+  const { getVaultItems } = useGetVaultItems();
   const router = useRouter();
   const userDefault = {
     username: "",
@@ -33,6 +35,7 @@ export default function Page() {
   const loginUser = async () => {
     const res = await login(user);
     if (res?.success) {
+      await getVaultItems("1");
       router.push("/home");
     } else {
       toast.error("Usuário ou senha incorretos!", {

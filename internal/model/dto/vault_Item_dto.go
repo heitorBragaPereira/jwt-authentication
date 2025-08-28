@@ -1,7 +1,6 @@
 package dto
 
 type VaultItemDTO struct {
-	Id             int    `json:"id"`
 	Description    string `json:"description"`
 	Username       string `json:"username"`
 	Url            string `json:"url"`

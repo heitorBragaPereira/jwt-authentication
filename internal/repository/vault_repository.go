@@ -21,7 +21,7 @@ func NewVaultRepository(db *sql.DB) VaultRepository {
 
 func (r *sqliteVaultRepository) GetVaultItemsByUserId(userID int) ([]dto.VaultItemDTO, error) {
 	query := `
-        SELECT id_item, description, username, url, encrypted_value, nonce, created_at, updated_at
+        SELECT description, username, url, encrypted_value, nonce, created_at, updated_at
         FROM vault_items
         WHERE id_user = ?
     `
@@ -37,7 +37,6 @@ func (r *sqliteVaultRepository) GetVaultItemsByUserId(userID int) ([]dto.VaultIt
 	for rows.Next() {
 		var item dto.VaultItemDTO
 		err := rows.Scan(
-			&item.Id,
 			&item.Description,
 			&item.Username,
 			&item.Url,

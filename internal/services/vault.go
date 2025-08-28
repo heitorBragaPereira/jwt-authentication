@@ -3,6 +3,7 @@ package services
 import (
 	"crypto/sha256"
 	"encoding/base64"
+	"fmt"
 	"jwt-authentication/internal/model/dto"
 	"jwt-authentication/internal/repository"
 	"jwt-authentication/internal/utils"
@@ -11,6 +12,7 @@ import (
 
 type VaultService interface {
 	VaultRegister(vaultItem dto.CreateVaultItemDTO) error
+	GetVaultItem(idUser int) ([]dto.VaultItemDTO, error)
 }
 
 type vaultService struct {
@@ -44,4 +46,18 @@ func (s *vaultService) VaultRegister(vaultItem dto.CreateVaultItemDTO) error {
 		HashedPassword: encryptedStr,
 		Nonce:          &nonceStr,
 	})
+}
+
+func (s *vaultService) GetVaultItem(idUser int) ([]dto.VaultItemDTO, error) {
+	items, err := s.vaultRepo.GetVaultItemsByUserId(idUser)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(items) == 0 {
+		return nil, fmt.Errorf("nenhum vault item encontrado para o usuário %d", idUser)
+	}
+
+	return items, nil
+
 }

@@ -10,6 +10,7 @@ import { useUserStore } from "@/stores/userStore";
 
 export default function Page() {
   const user = useUserStore((s) => s.user);
+
   return (
     <div className="w-full flex flex-col">
       <div className="w-full h-[80px] bg-secondary flex items-center justify-around">
