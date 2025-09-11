@@ -13,12 +13,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
-import Spinner from "@/components/ui/spinner";
-import { useGetVaultItems } from "@/hooks/useGetVaultItems";
+import Loader from "@/components/ui/loader";
 
 export default function Page() {
   const { login, loading } = useLoginUser();
-  const { getVaultItems } = useGetVaultItems();
+
   const router = useRouter();
   const userDefault = {
     username: "",
@@ -35,7 +34,6 @@ export default function Page() {
   const loginUser = async () => {
     const res = await login(user);
     if (res?.success) {
-      await getVaultItems("1");
       router.push("/home");
     } else {
       toast.error("Usuário ou senha incorretos!", {
@@ -46,7 +44,10 @@ export default function Page() {
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <Toaster richColors />
-      <div className="relative w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded">
+      <form
+        className="relative w-[350px] flex flex-col justify-center gap-4 px-4 py-6 bg-secondary rounded"
+        action={loginUser}
+      >
         <div className="w-full flex flex-col items-center mb-4">
           <Image src={path} alt="Logo" width={100} />
           <Subtitle>Acesso ao sistema</Subtitle>
@@ -73,17 +74,20 @@ export default function Page() {
               })
             }
           />
-          <Link path="/create-user" className="text-end text-primary">
-            Cadastrar um novo usuário?
-          </Link>
+          <span className="text-end">
+            <Link path="/create-user" className="text-primary">
+              Cadastrar um novo usuário?
+            </Link>
+          </span>
         </div>
-        <Button onClick={loginUser}>Entrar</Button>
+        <Button type="submit">Entrar</Button>
+
         {loading && (
           <div className="absolute left-0 top-0 rounded w-full h-full flex justify-center items-center backdrop-blur bg-white/30">
-            <Spinner />
+            <Loader />
           </div>
         )}
-      </div>
+      </form>
     </div>
   );
 }

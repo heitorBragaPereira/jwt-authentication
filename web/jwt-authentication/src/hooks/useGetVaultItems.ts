@@ -1,9 +1,9 @@
 import { vaultItems } from "@/services/vault";
-import { useUserStore } from "@/stores/userStore";
+import { vaultItemStore } from "@/stores/useVaultItemStore";
 
 export function useGetVaultItems() {
-  const setVaultItems = useUserStore((s) => s.setUser);
-  const getVaultItems = async (idUser: string) => {
+  const setVaultItems = vaultItemStore((s) => s.setVaultItems);
+  const getVaultItems = async (idUser: number) => {
     try {
       const response = await vaultItems(idUser);
       setVaultItems(response?.data);

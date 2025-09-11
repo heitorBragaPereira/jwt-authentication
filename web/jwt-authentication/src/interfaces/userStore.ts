@@ -7,4 +7,5 @@ export interface UserStore {
 export interface Store {
   user: UserStore | null;
   setUser: (user: UserStore | null) => void;
+  cleanUser: () => void;
 }

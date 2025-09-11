@@ -50,7 +50,7 @@ func main() {
 
 	apiGroup := router.Group("/api")
 	routes.InitRoutes(apiGroup, controllers)
-	if err := router.Run(":8081"); err != nil {
+	if err := router.Run(":8082"); err != nil {
 		log.Fatal(err)
 	}
 }

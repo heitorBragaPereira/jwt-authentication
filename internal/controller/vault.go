@@ -28,7 +28,13 @@ func (v *VaultController) CreateVaultItem(c *gin.Context) {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(201, gin.H{"message": "User created successfully"})
+
+	vaultItems, err := v.vaultService.GetVaultItem(vaulItem.IdUser)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(201, vaultItems)
 }
 
 func (v *VaultController) GetVaultItem(c *gin.Context) {

@@ -5,7 +5,7 @@ export const registerNewVaultItem = (vaultItem: VaultItem) => {
   return api.post("/vault/create", vaultItem);
 };
 
-export const vaultItems = (id: string) => {
+export const vaultItems = (id: number) => {
   return api.get("/vault/items", {
     params: { id },
   });

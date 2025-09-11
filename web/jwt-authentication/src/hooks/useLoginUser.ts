@@ -1,6 +1,6 @@
 import { LoginUser } from "@/interfaces/user";
 import { loginUser } from "@/services/user";
-import { useUserStore } from "@/stores/userStore";
+import { useUserStore } from "@/stores/useUserStore";
 import { useState } from "react";
 
 export function useLoginUser() {

@@ -7,6 +7,7 @@ export const useUserStore = create<Store>()(
     (set) => ({
       user: null,
       setUser: (user) => set({ user }),
+      cleanUser: () => set({ user: null }),
     }),
     { name: "user-data" }
   )

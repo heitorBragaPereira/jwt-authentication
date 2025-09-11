@@ -7,52 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { vaultItemStore } from "@/stores/useVaultItemStore";
+import { FilePen, Trash2 } from "lucide-react";
 
 export default function TableComponent() {
-  const invoices = [
-    {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
-    },
-    {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
-    },
-  ];
+  const vaultItems = vaultItemStore((s) => s.vaultItems);
+
   const head: string[] = ["Descrição", "Link", "Senha", "Ações"];
   return (
     <div>
@@ -70,12 +30,21 @@ export default function TableComponent() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell>{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell>Editar</TableCell>
+          {vaultItems?.map((vault, i: number) => (
+            <TableRow key={i}>
+              <TableCell>{vault.description}</TableCell>
+              <TableCell>{vault.url}</TableCell>
+              <TableCell>{vault.encryptedValue}</TableCell>
+              <TableCell className="flex gap-2">
+                <FilePen
+                  size={20}
+                  className="text-primary cursor-pointer hover:brightness-125 transition-brightness"
+                />{" "}
+                <Trash2
+                  size={20}
+                  className="text-red-300 cursor-pointer hover:saturate-200 transition-saturate"
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
