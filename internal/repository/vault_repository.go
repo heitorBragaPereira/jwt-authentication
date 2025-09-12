@@ -21,7 +21,7 @@ func NewVaultRepository(db *sql.DB) VaultRepository {
 
 func (r *sqliteVaultRepository) GetVaultItemsByUserId(userID int) ([]dto.VaultItemDTO, error) {
 	query := `
-        SELECT description, username, url, encrypted_value, nonce, created_at, updated_at
+        SELECT id_item, description, username, url, encrypted_value, nonce, created_at, updated_at
         FROM vault_items
         WHERE id_user = ?
     `
@@ -37,6 +37,7 @@ func (r *sqliteVaultRepository) GetVaultItemsByUserId(userID int) ([]dto.VaultIt
 	for rows.Next() {
 		var item dto.VaultItemDTO
 		err := rows.Scan(
+			&item.Id_item,
 			&item.Description,
 			&item.Username,
 			&item.Url,
@@ -70,6 +71,29 @@ func (r *sqliteVaultRepository) RegisterNewVaultItem(vaultItem dto.CreateVaultIt
 		vaultItem.Url,
 		vaultItem.HashedPassword,
 		vaultItem.Nonce,
+	)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *sqliteVaultRepository) UpdateNewVaultItem(vaultItem dto.UpdateVaultItemDTO) error {
+	query := `
+
+	UPDATE vault_items SET
+	description = ?, 
+	url = ?, 
+	encrypted_value = ? 
+	WHERE id_item = ? AND id_user = ?;
+`
+	_, err := r.db.Exec(query,
+		vaultItem.Description,
+		vaultItem.Url,
+		vaultItem.EncryptedValue,
+		vaultItem.IdItem,
+		vaultItem.IdUser,
 	)
 
 	if err != nil {

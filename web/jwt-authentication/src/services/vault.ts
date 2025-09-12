@@ -10,3 +10,7 @@ export const vaultItems = (id: number) => {
     params: { id },
   });
 };
+
+export const updateVaultItem = (vaultItem: VaultItem) => {
+  return api.put("/vault/update", vaultItem);
+};

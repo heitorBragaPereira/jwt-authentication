@@ -9,11 +9,18 @@ import {
 } from "@/components/ui/table";
 import { vaultItemStore } from "@/stores/useVaultItemStore";
 import { FilePen, Trash2 } from "lucide-react";
+import { VaultItems } from "@/interfaces/vault";
 
-export default function TableComponent() {
+interface Props {
+  editItem: (item: VaultItems) => void;
+}
+
+export default function TableComponent(props: Props) {
+  const { editItem } = props;
   const vaultItems = vaultItemStore((s) => s.vaultItems);
 
   const head: string[] = ["Descrição", "Link", "Senha", "Ações"];
+
   return (
     <div>
       <Table>
@@ -38,6 +45,7 @@ export default function TableComponent() {
               <TableCell className="flex gap-2">
                 <FilePen
                   size={20}
+                  onClick={() => editItem(vault)}
                   className="text-primary cursor-pointer hover:brightness-125 transition-brightness"
                 />{" "}
                 <Trash2

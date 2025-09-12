@@ -49,7 +49,7 @@ func (uc *UserController) Login(c *gin.Context) {
 	c.SetCookie(
 		"token",         // nome do cookie
 		loginResp.Token, // valor: o JWT gerado
-		60,              // tempo de expiração (em segundos) → 1h
+		3600,            // tempo de expiração (em segundos) → 1h
 		"/",             // path
 		"",              // domínio ("" = atual)
 		true,            // secure (HTTPS em produção!)

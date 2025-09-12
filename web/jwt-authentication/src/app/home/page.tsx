@@ -15,35 +15,58 @@ import TableComponent from "./components/TableComponent";
 
 import DialogComponent from "@/components/DialogComponent";
 import { useRegisterVaultItem } from "@/hooks/useRegisterVaultItem";
-import { VaultItem } from "@/interfaces/vault";
+import { useUpdateVaultItem } from "@/hooks/useUpdateVaultItem";
+import { VaultItem, VaultItems } from "@/interfaces/vault";
 import ContentDialog from "./components/contentDialog";
 import { toast } from "sonner";
+
+type ActionDialog = "post" | "update";
 
 export default function Page() {
   const user = useUserStore((s) => s.user);
   const vaultItemDefault = {
+    idItem: null,
     idUser: user?.idUser,
     username: user?.username,
     url: "",
     description: "",
     hashedPassword: "",
   };
+  const { registerVaultItem } = useRegisterVaultItem();
+  const { updateVaultItemAction } = useUpdateVaultItem();
+  const [vaultItem, setVaultItem] = useState<VaultItem>(vaultItemDefault);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
+  const [actionDialog, setActionDialog] = useState<ActionDialog>("post");
   const openDialogComponent = () => {
     setOpenDialog(true);
   };
   const closeDialog = () => {
     setOpenDialog(false);
+    setActionDialog("post");
     setVaultItem(vaultItemDefault);
+  };
+  const editItem = (item: VaultItems) => {
+    setActionDialog("update");
+    const newItem = {
+      idItem: item.idItem,
+      idUser: user?.idUser,
+      username: user?.username,
+      url: item.url,
+      description: item.description,
+      hashedPassword: item.encryptedValue,
+    };
+    setVaultItem(newItem);
+    setOpenDialog(true);
   };
   const footerDialog = [
     {
-      text: "Cadastrar",
-      action: () => saveNewVaultItem(vaultItem),
+      text: actionDialog === "post" ? "Cadastrar" : "Atualizar",
+      action: () =>
+        actionDialog === "post"
+          ? saveNewVaultItem(vaultItem)
+          : updateVaultItem(vaultItem),
     },
   ];
-  const { registerVaultItem } = useRegisterVaultItem();
-  const [vaultItem, setVaultItem] = useState<VaultItem>(vaultItemDefault);
 
   const vaultItems = vaultItemStore((s) => s.vaultItems);
   const { getVaultItems } = useGetVaultItems();
@@ -61,6 +84,20 @@ export default function Page() {
       });
     } else {
       toast.error("Erro ao cadastrar senha!", {
+        position: "top-right",
+      });
+    }
+  };
+
+  const updateVaultItem = async (vaultItem: VaultItem) => {
+    const res = await updateVaultItemAction(vaultItem);
+    if (res.success) {
+      closeDialog();
+      toast.success("Senha atualizada!", {
+        position: "top-right",
+      });
+    } else {
+      toast.error("Erro ao atualizar senha!", {
         position: "top-right",
       });
     }
@@ -115,7 +152,7 @@ export default function Page() {
                 Adicionar nova senha
               </Button>
             </div>
-            <TableComponent />
+            <TableComponent editItem={editItem} />
           </>
         ) : (
           <div className="w-full flex flex-col items-center mt-28 ">

@@ -48,6 +48,29 @@ func (s *vaultService) VaultRegister(vaultItem dto.CreateVaultItemDTO) error {
 	})
 }
 
+func (s *vaultService) VaultUpdate(vaultItem dto.UpdateVaultItemDTO) error {
+	rawKey := os.Getenv("VAULT_KEY")
+	hash := sha256.Sum256([]byte(rawKey))
+	key := hash[:]
+
+	encryptedValue, nonce, err := utils.Encrypt(key, []byte(vaultItem.EncryptedValue))
+	if err != nil {
+		return err
+	}
+
+	encryptedStr := base64.StdEncoding.EncodeToString(encryptedValue)
+	nonceStr := base64.StdEncoding.EncodeToString(nonce)
+
+	return s.vaultRepo.RegisterNewVaultItem(dto.UpdateVaultItemDTO{
+		IdUser:         vaultItem.IdUser,
+		Description:    vaultItem.Description,
+		Username:       vaultItem.Username,
+		Url:            vaultItem.Url,
+		HashedPassword: encryptedStr,
+		Nonce:          &nonceStr,
+	})
+}
+
 func (s *vaultService) GetVaultItem(idUser int) ([]dto.VaultItemDTO, error) {
 	items, err := s.vaultRepo.GetVaultItemsByUserId(idUser)
 	if err != nil {

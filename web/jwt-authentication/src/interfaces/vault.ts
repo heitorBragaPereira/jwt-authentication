@@ -1,4 +1,5 @@
 export interface VaultItem {
+  idItem: number | null;
   idUser: number | null | undefined;
   username: string | undefined;
   url: string;
@@ -7,6 +8,7 @@ export interface VaultItem {
 }
 
 export interface VaultItems {
+  idItem: number;
   description: string;
   username: string;
   url: string;
