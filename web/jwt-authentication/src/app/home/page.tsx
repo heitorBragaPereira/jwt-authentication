@@ -16,6 +16,7 @@ import TableComponent from "./components/TableComponent";
 import DialogComponent from "@/components/DialogComponent";
 import { useRegisterVaultItem } from "@/hooks/useRegisterVaultItem";
 import { useUpdateVaultItem } from "@/hooks/useUpdateVaultItem";
+import { useDeleteVaultItem } from "@/hooks/useDeleteVaultItem";
 import { VaultItem, VaultItems } from "@/interfaces/vault";
 import ContentDialog from "./components/contentDialog";
 import { toast } from "sonner";
@@ -24,6 +25,7 @@ type ActionDialog = "post" | "update";
 
 export default function Page() {
   const user = useUserStore((s) => s.user);
+
   const vaultItemDefault = {
     idItem: null,
     idUser: user?.idUser,
@@ -32,19 +34,25 @@ export default function Page() {
     description: "",
     hashedPassword: "",
   };
+
   const { registerVaultItem } = useRegisterVaultItem();
   const { updateVaultItemAction } = useUpdateVaultItem();
+  const { deleteVaultItemAction } = useDeleteVaultItem();
   const [vaultItem, setVaultItem] = useState<VaultItem>(vaultItemDefault);
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const [actionDialog, setActionDialog] = useState<ActionDialog>("post");
+
   const openDialogComponent = () => {
     setOpenDialog(true);
   };
+
   const closeDialog = () => {
     setOpenDialog(false);
     setActionDialog("post");
     setVaultItem(vaultItemDefault);
   };
+
+  console.log("Items ", vaultItem);
   const editItem = (item: VaultItems) => {
     setActionDialog("update");
     const newItem = {
@@ -58,24 +66,31 @@ export default function Page() {
     setVaultItem(newItem);
     setOpenDialog(true);
   };
+
+  const deleteItem = (item: VaultItems) => {
+    setActionDialog("update");
+    const itemDetele = {
+      idItem: item.idItem,
+      idUser: user?.idUser,
+    };
+    deleteVaultItemAction(itemDetele);
+  };
+
   const footerDialog = [
     {
       text: actionDialog === "post" ? "Cadastrar" : "Atualizar",
       action: () =>
-        actionDialog === "post"
-          ? saveNewVaultItem(vaultItem)
-          : updateVaultItem(vaultItem),
+        actionDialog === "post" ? saveNewVaultItem() : updateVaultItem(),
     },
   ];
 
   const vaultItems = vaultItemStore((s) => s.vaultItems);
   const { getVaultItems } = useGetVaultItems();
-  // console.log("Vault ", vaultItem);
   const handleChangeVaultItem = (el: Partial<VaultItem>) => {
     setVaultItem((prevState) => ({ ...prevState, ...el }));
   };
 
-  const saveNewVaultItem = async (vaultItem: VaultItem) => {
+  const saveNewVaultItem = async () => {
     const res = await registerVaultItem(vaultItem);
     if (res.success) {
       closeDialog();
@@ -89,7 +104,7 @@ export default function Page() {
     }
   };
 
-  const updateVaultItem = async (vaultItem: VaultItem) => {
+  const updateVaultItem = async () => {
     const res = await updateVaultItemAction(vaultItem);
     if (res.success) {
       closeDialog();
@@ -152,7 +167,7 @@ export default function Page() {
                 Adicionar nova senha
               </Button>
             </div>
-            <TableComponent editItem={editItem} />
+            <TableComponent editItem={editItem} deleteItem={deleteItem} />
           </>
         ) : (
           <div className="w-full flex flex-col items-center mt-28 ">

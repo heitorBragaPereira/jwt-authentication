@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"jwt-authentication/internal/model/dto"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type UserRepository interface {

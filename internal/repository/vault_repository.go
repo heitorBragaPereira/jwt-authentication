@@ -9,6 +9,8 @@ import (
 type VaultRepository interface {
 	GetVaultItemsByUserId(userID int) ([]dto.VaultItemDTO, error)
 	RegisterNewVaultItem(vaultItem dto.CreateVaultItemDTO) error
+	UpdateVaultItem(vaultItem dto.UpdateVaultItemDTO) error
+	DeleteVaultItem(vaultItem dto.DeleteVaultItemDTO) error
 }
 
 type sqliteVaultRepository struct {
@@ -79,19 +81,35 @@ func (r *sqliteVaultRepository) RegisterNewVaultItem(vaultItem dto.CreateVaultIt
 	return nil
 }
 
-func (r *sqliteVaultRepository) UpdateNewVaultItem(vaultItem dto.UpdateVaultItemDTO) error {
+func (r *sqliteVaultRepository) UpdateVaultItem(vaultItem dto.UpdateVaultItemDTO) error {
 	query := `
-
 	UPDATE vault_items SET
 	description = ?, 
 	url = ?, 
-	encrypted_value = ? 
+	encrypted_value = ?, 
+	nonce = ?
 	WHERE id_item = ? AND id_user = ?;
 `
 	_, err := r.db.Exec(query,
 		vaultItem.Description,
 		vaultItem.Url,
-		vaultItem.EncryptedValue,
+		vaultItem.HashedPassword,
+		vaultItem.Nonce,
+		vaultItem.IdItem,
+		vaultItem.IdUser,
+	)
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *sqliteVaultRepository) DeleteVaultItem(vaultItem dto.DeleteVaultItemDTO) error {
+	query := `
+	DELETE FROM vault_items WHERE id_item = ? AND id_user = ?;
+`
+	_, err := r.db.Exec(query,
 		vaultItem.IdItem,
 		vaultItem.IdUser,
 	)

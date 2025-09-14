@@ -1,7 +1,7 @@
 # Caminhos e configurações
 MIGRATE_BIN=migrate
-DB_DRIVER=sqlite3
-DB_PATH=sqlite3://data.db
+DB_DRIVER=sqlite
+DB_PATH=sqlite://data.db
 MIGRATION_PATH=internal/migrations
 
 .PHONY: migrate-create migrate-up migrate-down migrate-version

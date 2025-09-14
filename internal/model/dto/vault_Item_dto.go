@@ -21,10 +21,16 @@ type CreateVaultItemDTO struct {
 }
 
 type UpdateVaultItemDTO struct {
-	IdItem         int    `json:"idItem"`
-	IdUser         int    `json:"idUser"`
-	Description    string `json:"description"`
-	Username       string `json:"username"`
-	Url            string `json:"url"`
-	EncryptedValue string `json:"hashedPassword"`
+	IdItem         int     `json:"idItem"`
+	IdUser         int     `json:"idUser"`
+	Description    string  `json:"description"`
+	Username       string  `json:"username"`
+	Url            string  `json:"url"`
+	HashedPassword string  `json:"hashedPassword"`
+	Nonce          *string `json:"nonce"`
+}
+
+type DeleteVaultItemDTO struct {
+	IdItem int `json:"idItem"`
+	IdUser int `json:"idUser"`
 }

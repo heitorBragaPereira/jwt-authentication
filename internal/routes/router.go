@@ -19,7 +19,8 @@ func InitRoutes(r *gin.RouterGroup, c *controller.ControllerContainer) {
 	protected.Use(middleware.AuthMiddleware())
 	{
 		protected.POST("/create", c.Vault.CreateVaultItem)
-		protected.PUT("/update", c.Vault.CreateVaultItem)
+		protected.PUT("/update", c.Vault.UpdateVaultItem)
+		protected.DELETE("/delete", c.Vault.VaultDelete)
 		protected.GET("/items", c.Vault.GetVaultItem)
 	}
 }

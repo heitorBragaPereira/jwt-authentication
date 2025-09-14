@@ -13,10 +13,11 @@ import { VaultItems } from "@/interfaces/vault";
 
 interface Props {
   editItem: (item: VaultItems) => void;
+  deleteItem: (item: VaultItems) => void;
 }
 
 export default function TableComponent(props: Props) {
-  const { editItem } = props;
+  const { editItem, deleteItem } = props;
   const vaultItems = vaultItemStore((s) => s.vaultItems);
 
   const head: string[] = ["Descrição", "Link", "Senha", "Ações"];
@@ -51,6 +52,7 @@ export default function TableComponent(props: Props) {
                 <Trash2
                   size={20}
                   className="text-red-300 cursor-pointer hover:saturate-200 transition-saturate"
+                  onClick={() => deleteItem(vault)}
                 />
               </TableCell>
             </TableRow>

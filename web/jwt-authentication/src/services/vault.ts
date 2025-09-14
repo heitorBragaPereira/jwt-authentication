@@ -1,4 +1,4 @@
-import { VaultItem } from "@/interfaces/vault";
+import { VaultItem, ItemDelete } from "@/interfaces/vault";
 import { api } from "@/lib/api";
 
 export const registerNewVaultItem = (vaultItem: VaultItem) => {
@@ -13,4 +13,8 @@ export const vaultItems = (id: number) => {
 
 export const updateVaultItem = (vaultItem: VaultItem) => {
   return api.put("/vault/update", vaultItem);
+};
+
+export const deleteVaultItem = (item: ItemDelete) => {
+  return api.delete("/vault/delete", { data: item });
 };

@@ -32,3 +32,6 @@ go.sum
 # Arquivos gerados por ferramentas (exemplo: dep)
 Gopkg.lock
 Gopkg.toml
+
+# Arquivos de segurança
+.env

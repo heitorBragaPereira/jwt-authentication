@@ -22,3 +22,8 @@ export interface Store {
   vaultItems: VaultItems[] | null;
   setVaultItems: (items: VaultItems[] | null) => void;
 }
+
+export interface ItemDelete {
+  idItem: number;
+  idUser: number | undefined;
+}

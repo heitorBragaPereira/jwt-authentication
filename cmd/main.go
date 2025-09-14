@@ -11,14 +11,21 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
+	_ "github.com/golang-migrate/migrate/v4/database/sqlite"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	_ "github.com/mattn/go-sqlite3"
+	"github.com/joho/godotenv"
+	_ "modernc.org/sqlite"
 
 	"github.com/golang-migrate/migrate/v4"
 )
 
 func main() {
+	// Inicializa a variável de ambiente
+	if err := godotenv.Load("../.env"); err != nil {
+		log.Println("Aviso: não foi possível carregar .env")
+	}
+
+	// Executa as migrations
 	if err := runMigrations(); err != nil {
 		log.Fatalf("[ERROR] Erro ao aplicar migrations: %v", err)
 	} else {
@@ -41,7 +48,7 @@ func main() {
 	router := gin.Default()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"}, // frontend local
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -64,7 +71,7 @@ func runMigrations() error {
 
 	m, err := migrate.New(
 		"file://../internal/migrations",
-		"sqlite3://db/vault.db",
+		"sqlite://db/vault.db",
 	)
 	if err != nil {
 		return err

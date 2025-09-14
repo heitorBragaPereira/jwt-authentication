@@ -44,7 +44,27 @@ func (v *VaultController) UpdateVaultItem(c *gin.Context) {
 		c.JSON(restErr.Code, restErr)
 		return
 	}
-	if err := v.vaultService.VaultRegister(vaulItem); err != nil {
+	if err := v.vaultService.VaultUpdate(vaulItem); err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	vaultItems, err := v.vaultService.GetVaultItem(vaulItem.IdUser)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(201, vaultItems)
+}
+
+func (v *VaultController) VaultDelete(c *gin.Context) {
+	var vaulItem dto.DeleteVaultItemDTO
+	if err := c.ShouldBindJSON(&vaulItem); err != nil {
+		restErr := rest.NewBadRequestError("There are some incorrect filds")
+		c.JSON(restErr.Code, restErr)
+		return
+	}
+	if err := v.vaultService.VaultDelete(vaulItem); err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
