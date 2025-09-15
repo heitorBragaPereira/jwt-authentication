@@ -42,7 +42,7 @@ export default function TableComponent(props: Props) {
             <TableRow key={i}>
               <TableCell>{vault.description}</TableCell>
               <TableCell>{vault.url}</TableCell>
-              <TableCell>{vault.encryptedValue}</TableCell>
+              <TableCell>{"*".repeat(vault.encryptedValue.length)}</TableCell>
               <TableCell className="flex gap-2">
                 <FilePen
                   size={20}
