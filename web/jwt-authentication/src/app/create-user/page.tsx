@@ -6,39 +6,29 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import path from "@/assets/logo.svg";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
 import { Subtitle } from "@/components/ui/subtitle";
 import { Link } from "@/components/ui/link";
 import { CreateUser } from "@/interfaces/user";
 import { Toaster } from "@/components/ui/sonner";
 import { useCreateUser } from "@/hooks/useCreateUser";
-import Spinner from "@/components/ui/spinner";
+import Spinner from "@/components/ui/loader";
+import { useForm } from "react-hook-form";
 
 export default function Page() {
-  const userDefault: CreateUser = {
-    name: "",
-    username: "",
-    password: "",
-  };
-  const [user, setUser] = useState<CreateUser>(userDefault);
-  const [passwordValidate, setPasswordValidate] = useState<string>("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<CreateUser>();
   const { create, loading } = useCreateUser();
-  const disabledButton =
-    passwordValidate != user.password ||
-    passwordValidate === "" ||
-    user.password === "";
-  const handleChangeUser = (value: Partial<CreateUser>) => {
-    setUser((prevState) => ({
-      ...prevState,
-      ...value,
-    }));
-  };
-  const handleChangeValidate = (value: string) => {
-    setPasswordValidate(value);
-  };
-
-  const createUser = async () => {
-    const res = await create(user);
+  const createUser = async (data: CreateUser) => {
+    const res = await create({
+      name: data?.name,
+      username: data?.username,
+      password: data.password,
+    });
     if (res && res.success) {
       toast.success("Usuário cadastrado ;)", {
         position: "top-right",
@@ -62,49 +52,64 @@ export default function Page() {
           <Label>Nome</Label>
           <Input
             placeholder="Seu nome..."
-            value={user.name}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChangeUser({ name: e.target.value })
-            }
+            {...register("name", { required: "Campo obrigatório" })}
+            aria-invalid={!!errors.name}
           />
+          {errors?.name && (
+            <span className="text-red-400 text-[12px]">
+              {errors?.name.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <Label>Usuário</Label>
           <Input
             placeholder="Seu usuário..."
-            value={user.username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChangeUser({ username: e.target.value })
-            }
+            {...register("username", { required: "Campo obrigatório" })}
+            aria-invalid={!!errors.username}
           />
+          {errors?.username && (
+            <span className="text-red-400 text-[12px]">
+              {errors?.username.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <Label>Senha</Label>
           <Input
             type="password"
             placeholder="Sua senha..."
-            value={user.password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChangeUser({ password: e.target.value })
-            }
+            {...register("password", { required: "Campo obrigatório" })}
+            aria-invalid={!!errors.password}
           />
+          {errors?.password && (
+            <span className="text-red-400 text-[12px]">
+              {errors?.password.message}
+            </span>
+          )}
         </div>
         <div className="flex flex-col gap-1">
           <Label>Confirme a senha</Label>
           <Input
             type="password"
             placeholder="Sua senha..."
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleChangeValidate(e.target.value)
-            }
+            aria-invalid={!!errors.passwordValidate}
+            {...register("passwordValidate", {
+              required: "Campo obrigatório",
+              validate: (value) =>
+                value === watch("password") || "As senhas não conferem",
+            })}
           />
+          {errors?.passwordValidate && (
+            <span className="text-red-400 text-[12px]">
+              {errors?.passwordValidate?.message}
+            </span>
+          )}
           <Link path="/login" className="text-end text-primary">
             Voltar para a tela de login
           </Link>
         </div>
-        <Button onClick={createUser} disabled={disabledButton}>
-          Cadastrar
-        </Button>
+        <Button onClick={() => handleSubmit(createUser)()}>Cadastrar</Button>
         {loading && (
           <div className="absolute left-0 top-0 rounded w-full h-full flex justify-center items-center backdrop-blur bg-white/30">
             <Spinner />
