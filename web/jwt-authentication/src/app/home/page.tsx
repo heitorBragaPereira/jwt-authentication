@@ -51,8 +51,6 @@ export default function Page() {
     setActionDialog("post");
     setVaultItem(vaultItemDefault);
   };
-
-  console.log("Items ", vaultItem);
   const editItem = (item: VaultItems) => {
     setActionDialog("update");
     const newItem = {

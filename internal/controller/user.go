@@ -45,15 +45,14 @@ func (uc *UserController) Login(c *gin.Context) {
 		return
 	}
 
-	// 🧠 Define o cookie HttpOnly com o token JWT
 	c.SetCookie(
 		"token",         // nome do cookie
-		loginResp.Token, // valor: o JWT gerado
-		3600,            // tempo de expiração (em segundos) → 1h
+		loginResp.Token, // JWT gerado
+		3600,            // tempo de expiração em segundos
 		"/",             // path
-		"",              // domínio ("" = atual)
-		true,            // secure (HTTPS em produção!)
-		true,            // httpOnly (impede acesso via JS)
+		"",              // domínio "" = atual
+		true,            // secure, uso de https em produção
+		true,            // httpOnly
 	)
 
 	c.JSON(200, loginResp)
