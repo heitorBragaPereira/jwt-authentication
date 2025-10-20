@@ -1,20 +1,20 @@
-import { useState } from "react";
 import { createUser } from "@/services/user";
-import { CreateUser } from "@/interfaces/user";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useCreateUser() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const create = async (data: CreateUser) => {
-    setLoading(true);
-    try {
-      await createUser(data);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error };
-    } finally {
-      setLoading(false);
-    }
-  };
+  const queryClient = useQueryClient();
 
-  return { create, loading };
+  const mutation = useMutation({
+    mutationFn: createUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+    },
+  });
+
+  // Retornando mutateAsync, isPending e error diretamente
+  return {
+    createUser: mutation.mutateAsync,
+    loading: mutation.isPending,
+    error: mutation.error,
+  };
 }
