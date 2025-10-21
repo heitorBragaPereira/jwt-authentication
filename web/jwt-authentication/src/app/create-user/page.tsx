@@ -22,14 +22,15 @@ export default function Page() {
     watch,
     formState: { errors },
   } = useForm<CreateUser>();
-  const { create, loading } = useCreateUser();
-  const createUser = async (data: CreateUser) => {
-    const res = await create({
+  const { createUser, loading } = useCreateUser();
+  const registerUser = async (data: CreateUser) => {
+    const { status } = await createUser({
       name: data?.name,
       username: data?.username,
       password: data.password,
     });
-    if (res && res.success) {
+
+    if (status === 201) {
       toast.success("Usuário cadastrado ;)", {
         position: "top-right",
       });
@@ -109,7 +110,7 @@ export default function Page() {
             Voltar para a tela de login
           </Link>
         </div>
-        <Button onClick={() => handleSubmit(createUser)()}>Cadastrar</Button>
+        <Button onClick={() => handleSubmit(registerUser)()}>Cadastrar</Button>
         {loading && (
           <div className="absolute left-0 top-0 rounded w-full h-full flex justify-center items-center backdrop-blur bg-white/30">
             <Spinner />

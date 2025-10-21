@@ -1,23 +1,20 @@
-import { vaultItemStore } from "@/stores/useVaultItemStore";
 import { deleteVaultItem } from "@/services/vault";
-import { ItemDelete } from "@/interfaces/vault";
-import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useDeleteVaultItem() {
-  const [loading, setLoading] = useState<boolean>(false);
-  const setVaultItems = vaultItemStore((s) => s.setVaultItems);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: deleteVaultItem,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["deleteVaultItem"] });
+    },
+  });
 
-  const deleteVaultItemAction = async (item: ItemDelete) => {
-    setLoading(true);
-    try {
-      const res = await deleteVaultItem(item);
-      setVaultItems(res?.data);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error };
-    } finally {
-      setLoading(false);
-    }
+  const { mutateAsync, isPending, error } = mutation;
+
+  return {
+    deleteVaultItemAction: mutateAsync,
+    loading: isPending,
+    error: error,
   };
-  return { deleteVaultItemAction, loading };
 }

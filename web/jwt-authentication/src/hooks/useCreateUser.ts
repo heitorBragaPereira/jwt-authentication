@@ -11,7 +11,6 @@ export function useCreateUser() {
     },
   });
 
-  // Retornando mutateAsync, isPending e error diretamente
   return {
     createUser: mutation.mutateAsync,
     loading: mutation.isPending,
