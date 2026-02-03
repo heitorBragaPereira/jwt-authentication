@@ -50,8 +50,9 @@ export default function Page() {
           <Subtitle>Cadastrar usuário</Subtitle>
         </div>
         <div className="flex flex-col gap-1">
-          <Label>Nome</Label>
+          <Label htmlFor="name">Nome</Label>
           <Input
+            id="name"
             placeholder="Seu nome..."
             {...register("name", { required: "Campo obrigatório" })}
             aria-invalid={!!errors.name}
@@ -63,8 +64,9 @@ export default function Page() {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label>Usuário</Label>
+          <Label htmlFor="username">Usuário</Label>
           <Input
+            id="username"
             placeholder="Seu usuário..."
             {...register("username", { required: "Campo obrigatório" })}
             aria-invalid={!!errors.username}
@@ -76,8 +78,9 @@ export default function Page() {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label>Senha</Label>
+          <Label htmlFor="password">Senha</Label>
           <Input
+            id="password"
             type="password"
             placeholder="Sua senha..."
             {...register("password", { required: "Campo obrigatório" })}
@@ -90,8 +93,9 @@ export default function Page() {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label>Confirme a senha</Label>
+          <Label htmlFor="passwordValidate">Confirme a senha</Label>
           <Input
+            id="passwordValidate"
             type="password"
             placeholder="Sua senha..."
             aria-invalid={!!errors.passwordValidate}

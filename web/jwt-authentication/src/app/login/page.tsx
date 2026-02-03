@@ -47,8 +47,9 @@ export default function Page() {
           <Subtitle>Acesso ao sistema</Subtitle>
         </div>
         <div className="flex flex-col gap-1">
-          <Label>Usuário</Label>
+          <Label htmlFor="username">Usuário</Label>
           <Input
+            id="username"
             {...register("username", { required: "Campo obrigatório" })}
             aria-invalid={!!errors.username}
             placeholder="Seu usuário..."
@@ -60,8 +61,9 @@ export default function Page() {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <Label>Senha</Label>
+          <Label htmlFor="password">Senha</Label>
           <Input
+            id="password"
             {...register("password", { required: "Campo obrigatório" })}
             aria-invalid={!!errors.password}
             type="password"
